@@ -1,0 +1,32 @@
+spin_manifest_version = 2
+
+[application]
+name = "qwik"
+version = "0.1.0"
+authors = ["Van Vuong Ngo <20791239+vanvuongngo@users.noreply.github.com>"]
+description = "Qwik example"
+
+[[trigger.http]]
+route = "/..."
+component = "home"
+
+[component.home]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+files = [{ source = "home/dist/", destination = "/" }]
+exclude_files = ["**/node_modules"]
+
+[component.home.build]
+command = "pnpm build"
+watch = ["src/**/*.tsx", "src/**/*.css"]
+workdir = "home"
+
+[[trigger.http]]
+route = "/version"
+component = "version"
+
+[component.version]
+source = "version/target/version.wasm"
+[component.version.build]
+command = "npm run build"
+workdir = "version"
+
